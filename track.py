@@ -9,10 +9,60 @@ HTML = """
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HACKER TRACKER</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+
+/* MATRIX BACKGROUND */
+
+#matrix{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-5;
+opacity:0.25;
+}
+
+/* BUILT BY SHASHI */
+
+.creator{
+position:fixed;
+bottom:15px;
+right:15px;
+padding:10px 18px;
+border-radius:12px;
+
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(8px);
+
+border:1px solid #00f7ff;
+
+color:#00f7ff;
+font-size:13px;
+font-weight:bold;
+
+box-shadow:
+0 0 10px #00f7ff,
+0 0 20px #00f7ff;
+
+animation:creatorGlow 2s infinite alternate;
+}
+
+@keyframes creatorGlow{
+from{
+transform:scale(1);
+opacity:.8;
+}
+to{
+transform:scale(1.05);
+opacity:1;
+}
+}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 
@@ -115,6 +165,18 @@ margin-top:18px;
 box-shadow:
 0 0 20px rgba(0,247,255,0.3);
 transition:0.3s;
+animation:cardEntry 0.8s ease;
+}
+
+@keyframes cardEntry{
+from{
+opacity:0;
+transform:translateY(50px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .card:hover{
@@ -122,6 +184,88 @@ transform:translateY(-3px);
 box-shadow:
 0 0 30px rgba(0,247,255,0.5);
 }
+
+
+/* =========================
+   MOBILE RESPONSIVE DESIGN
+   ========================= */
+
+@media screen and (max-width:768px){
+
+.container{
+width:100%;
+padding:12px;
+}
+
+.title{
+font-size:26px;
+margin-top:15px;
+}
+
+.card{
+padding:15px;
+border-radius:14px;
+}
+
+input{
+font-size:15px;
+padding:13px;
+}
+
+button{
+padding:13px;
+font-size:15px;
+}
+
+.info{
+font-size:15px;
+line-height:28px;
+}
+
+#map{
+height:250px;
+}
+
+.creator{
+right:8px;
+bottom:8px;
+font-size:11px;
+padding:8px 12px;
+}
+
+}
+
+@media screen and (max-width:480px){
+
+.title{
+font-size:22px;
+}
+
+.card{
+padding:12px;
+}
+
+input{
+font-size:14px;
+padding:12px;
+}
+
+button{
+font-size:14px;
+padding:12px;
+}
+
+#map{
+height:220px;
+}
+
+.creator{
+font-size:10px;
+padding:6px 10px;
+}
+
+}
+
 
 /* INPUT */
 
@@ -211,6 +355,9 @@ opacity:0.8;
 </style>
 
 </head>
+<div class="title">
+⚡ SHASHI CYBER CONSOLE ⚡
+</div>
 <body>
 
 <div class="container">
@@ -349,6 +496,70 @@ document.getElementById("distance").innerHTML="📏 Distance: "+km.toFixed(2)+" 
 
 }
 </script>
+
+<div class="creator">
+    ⚡ BUILT BY SHASHI.MULI ⚡
+</div>
+
+<canvas id="matrix"></canvas>
+
+<script>
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters =
+"01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for(let i=0;i<columns;i++){
+    drops[i]=1;
+}
+
+function draw(){
+
+    ctx.fillStyle="rgba(5,8,22,0.08)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#00f7ff";
+    ctx.font=fontSize+"px monospace";
+
+    for(let i=0;i<drops.length;i++){
+
+        const text =
+        letters[Math.floor(
+        Math.random()*letters.length)];
+
+        ctx.fillText(
+        text,
+        i*fontSize,
+        drops[i]*fontSize
+        );
+
+        if(
+        drops[i]*fontSize > canvas.height &&
+        Math.random() > 0.975
+        ){
+            drops[i]=0;
+        }
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw,33);
+
+window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
+</script>
+
 
 </body>
 </html>
